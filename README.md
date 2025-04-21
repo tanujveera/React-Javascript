@@ -90,7 +90,7 @@ c = 6; // TypeError: Assignment to constant variables
 ```
 
 ## Hoisting
-During creation phase, all variable and function declarations are moved to the top of the code.
+During creation phase, all variable and function declarations are moved to the top of the scope before execution.
 
 ```js
 console.log(a); // undefined
@@ -143,3 +143,28 @@ console.log(nums);
 console.log(moreThenTwo);
 ```
 
+### reduce()
+
+- It reduces will take elements of array and return a single value.
+
+```js
+const nums = [1,2,3,4]
+// acc - accumulator is the previous value and initial value is 0 in this case as mentioned as 2nd parameter
+// curr is the current value in array, initially it will be 1st element
+// i - index
+// arr - is the array
+const sum = nums.reduce((acc, curr,i ,arr)=>{
+    console.log("acc "+acc+" curr "+curr)
+    return acc+curr;
+},0)
+console.log(nums);
+console.log(sum);
+
+// O/p:
+acc 0 curr 1
+acc 1 curr 2
+acc 3 curr 3
+acc 6 curr 4
+[ 1, 2, 3, 4 ]
+10
+```
