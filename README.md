@@ -217,6 +217,28 @@ const moreThenTwo = nums.myFilter((num,i,arr)=>{
 console.log(moreThenTwo) // [3,4]
 ```
 
+### Pollyfill for reduce
+
+```js
+// Array.reduce((acc,curr, i , arr)=> { })
+// Creating a polyfill
+Array.prototype.myReduce = function (cb,initialValue) {
+    var accumulator = initialValue;
+    for(let i = 0; i< this.length;i++){
+        accumulator = accumulator ? cb(accumulator,this[i],i,this) : this[i]
+    }
+    return accumulator;
+}
+
+const nums = [1,2,3,4];
+// using the new map prototype implementation
+const reducePolyfill = nums.myReduce((acc,curr,i,arr)=>{
+    return acc + curr;
+})
+
+console.log(reducePolyfill) // 10
+```
+
 ## Interview Question
 
 ```js
@@ -262,4 +284,26 @@ const totalMarks = students.reduce((acc,curr)=>{
    return acc+curr.marks
 },0)
 console.log(totalMarks) //310
+
+//Question 4
+// return only those names with more than 60 marks
+const namesMoreThanSixty = students.filter(s => s.marks > 60).map(stu => stu.name);
+console.log(namesMoreThanSixty) // [ 'Vijay', 'Kishore', 'Krishna' ]
+
+//Question 5
+// return total marks with more than 60 marks
+const marksMoreThenSixty = students.filter(s => s.marks >60).reduce((acc,curr)=> acc+curr.marks,0)
+console.log(marksMoreThenSixty) // 280
+
+// Question 6
+// return total marks for students with marks greater than 60 after 20 marks have been added to those who scored less than 60
+const scored60Total = students.map((s)=>{
+    if(s.marks<60){
+        s.marks += 20;
+    }
+    return s
+})
+.filter(s=>s.marks>60)
+.reduce((acc,curr)=>acc+curr.marks,0)
+console.log(scored60Total); // 280
 ```
