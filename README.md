@@ -217,3 +217,49 @@ const moreThenTwo = nums.myFilter((num,i,arr)=>{
 console.log(moreThenTwo) // [3,4]
 ```
 
+## Interview Question
+
+```js
+// map, filter, reduce Interview questions
+//Question 1
+// return new array with all names in Caps
+let students = [
+    {name:"Tanuj", rollNumber:31,marks:30},
+    {name:"Vijay", rollNumber:45,marks:90},
+    {name:"Kishore", rollNumber:52,marks:90},
+    {name:"Krishna", rollNumber:20,marks:100},
+]
+
+// Using for loop
+const names = []
+for(let i = 0; i<students.length;i++){
+    names.push(students[i].name.toUpperCase());
+}
+console.log(names) // [ 'TANUJ', 'VIJAY', 'KISHORE', 'KRISHNA' ]
+
+// Using map
+const namesMap = students.map((s)=>s.name.toUpperCase());
+console.log(namesMap) // [ 'TANUJ', 'VIJAY', 'KISHORE', 'KRISHNA' ]
+
+//Question 2
+// return only those values with more than 60 marks
+const marksMoreThanSixty = students.filter((s)=>s.marks >60);
+console.log(marksMoreThanSixty)
+/*
+[
+  { name: 'Vijay', rollNumber: 45, marks: 90 },
+  { name: 'Kishore', rollNumber: 52, marks: 90 },
+  { name: 'Krishna', rollNumber: 20, marks: 100 }
+]
+*/
+
+//Question 3
+// return only those values with more than 60 marks & rollnumber >50
+const sixtyAndRollNumber = students.filter((s)=> s.marks>60 && s.rollNumber >50);
+console.log(sixtyAndRollNumber) // [ { name: 'Kishore', rollNumber: 52, marks: 90 } ]
+
+const totalMarks = students.reduce((acc,curr)=>{
+   return acc+curr.marks
+},0)
+console.log(totalMarks) //310
+```
