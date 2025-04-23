@@ -78,3 +78,21 @@ const greetUma = makeGreeter("Hello");
 greetHello();  // “Hello, Hello!”
 ```
 
+## IIFE - Immediately Invoked Function Expression
+
+A function which invokes itself is a IIFE
+```js
+// Ex 1
+(function x(n){
+    console.log(n*n);
+})(5) // 25
+
+// Ex 2
+// inner function will search for x in its scope
+// if the x is not found it searches in its parent scope
+(function (x) {
+    return (function (y){
+        console.log(x) // 1
+    })(2)
+})(1)
+```
