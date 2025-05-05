@@ -155,3 +155,148 @@ for (var i = 0; i < 5; i++) {
     })(i);
 }
 ```
+
+# Function Hoisting
+
+- Functions are hoisted differently in JS.
+- If you see the source tab in browser, you can find the functionName with whole function definition but variable `x` is undefined. 
+
+```js
+functionName() // o/p: Function Name
+console.log(x); // o/p: undefined
+
+function functionName() {
+    console.log("Function Name");
+}
+
+var x =9;
+```
+
+- Even though this is function scope, `x` is hoisted in local scope with `undefined`
+```js
+functionName()
+
+function functionName() {
+    console.log(x); // undefined
+    var x =9;
+    console.log("Function Name"); // Function Name
+}
+```
+
+- This code returns `undefined` since the `x = 9` in function will shadow the global scoped `x = 8` and the printing the `x` even before the variable is declared.
+```js
+var x = 8;
+
+function functionName() {
+    console.log(x);
+    var x =9;
+}
+
+functionName()
+```
+
+# Params vs Arguments
+
+```js
+function square(num){ // Parameters or Params
+  console.log(num * num);
+}
+
+square(5); // Arguments
+```
+
+# Spread / Rest Operator
+
+```js
+function multiply (...nums) { // Rest Operator
+    console.log(nums[0] * nums[1])
+}
+
+var arr = [5,6]
+
+multiply(...arr) // Spread Operator
+```
+
+- Rest Operator must be the last formal parameter, so this code will throw error
+
+```js
+const fn = (a,...numbers,x,y) => {
+    console.log(x,y)
+}
+
+fn(2,3,4,3,5,9)
+```
+
+- Here `a = 2` `x=3` `y=4` and remaining are collected in `...numbers` rest operator
+```js
+const fn = (a,x,y,...numbers) => {
+    console.log(x,y) // 3, 4
+    console.log(numbers) // [0,5,9]
+}
+
+fn(2,3,4,0,5,9)
+```
+
+# Callback Function
+
+- A callback function is a function passed into another function as an argument, which is then invoked inside the outer function to complete some kind of routine or action.
+
+```js
+function greet(name, callback) {
+    console.log("Hello, " + name + "!");
+    callback();
+}
+
+function sayGoodbye() {
+    console.log("Goodbye!");
+}
+
+greet("Alice", sayGoodbye);
+
+// Output
+// Hello, Alice!
+// Goodbye!
+```
+
+# Arrow Functions
+
+```js
+// 1 - Syntax
+function square(num) {
+    return num * num;
+}
+
+const squareFn = (num) => {
+    return num * num;
+}
+
+// 2 - Implicit 'return' keyword
+const squareArr = (num) => num * num;
+
+// 3 - arguments
+// You can use arguments keyword to get the function arguments even if params are not defined.
+function fn (){
+    console.log(arguments); // [Arguments] { '0': 1, '1': 3, '2': 2 }
+}
+
+fn(1,3,2)
+// ---
+const fnArr = () => {
+    console.log(arguments); // ReferenceError
+}
+
+fnArr(1,3,2)
+
+// 4 - 'this' keyword
+/* Here, rc1 is a arrow function and this keyword will check the global scope
+But rc2 function will check local scope which is in user object.
+*/
+let user = {
+    username : 'tanuj veera',
+    rc1: ()=> console.log("rc1 username "+ this.username),
+    rc2 (){console.log("rc1 username "+ this.username)},
+}
+
+user.rc1() // undefined
+user.rc2() // tanuj veera
+```
