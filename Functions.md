@@ -96,3 +96,62 @@ A function which invokes itself is a IIFE
     })(2)
 })(1)
 ```
+
+# Function Scope
+
+- `var` is function-scoped, not block-scoped.
+- By the time any of the `setTimeout` callbacks are executed, the loop has already completed, and i has been incremented to 5.
+- All the scheduled functions share the same `i` variable, which now holds the value 5.
+- So when `setTimeout` fires (after 0ms, 1000ms, ..., 4000ms), they all reference the same i, which is now 5.
+
+```js
+for(var i =0; i<5;i++){
+    setTimeout(function () {
+        console.log(i);
+    },i*1000);
+}
+/* O/p
+5
+5
+5
+5
+5
+*/
+```
+---
+- `let` is block-scoped.
+- Each iteration of the loop creates a new binding of `i`, scoped to that iteration.
+- So, when the `setTimeout` executes, it remembers the correct `i` for that iteration via closure over a fresh variable.
+- This is one of the key reasons why `let` is preferred in modern JavaScript over `var` for block-scoped behavior.
+
+```js
+for(let i =0; i<5;i++){
+    setTimeout(function () {
+        console.log(i);
+    },i*1000);
+}
+/* O/p
+0
+1
+2
+3
+4
+*/
+```
+
+## Using IIFE
+- If you want to preserve the current value of i, you can create a new scope using an `IIFE` (Immediately Invoked Function Expression).
+- Creates a new execution context for each value of i.
+- Passes i as j, which is locally scoped to that IIFE call.
+- The setTimeout callback closes over j, not i.
+- This closure ensures each timeout logs the correct value of j.
+
+```js
+for (var i = 0; i < 5; i++) {
+    (function (j) {
+        setTimeout(function () {
+            console.log(j);
+        }, j * 1000);
+    })(i);
+}
+```
