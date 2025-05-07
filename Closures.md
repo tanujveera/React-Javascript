@@ -62,7 +62,37 @@ makeFun()(5)
 makeFun()(5)
 ```
 
+## Automatic Semicolon Insertion (ASI)
+ - Here there is no semicolon for `let count = 0` 
 
+```js
+let count = 0 // no semicolon ;
+// gives TypeError: 0 is not a function
+(function printCount () {
+  if (count === 0) {
+    let count = 1;
+    console.log(count);
+  }
+  console.log(count);
+})();
+
+// JS Engine will consider it in this way
+let count = 0(function printCount () {...}) // TypeError: 0 is not a function
+
+let count = 0; // no semicolon ;
+
+(function printCount () {
+  if (count === 0) {
+    let count = 1;
+    console.log(count); // 1
+  }
+  console.log(count); // 0
+})();
+```
+
+## Interview Questions
+
+Q1 Closure example for local and lexical scope using IIFE
 
 ```js
 let count = 0;
@@ -75,3 +105,10 @@ let count = 0;
   console.log(count) // 0
 })()
 ```
+
+Q2 Write a function that would allow you to do this
+
+```js
+var addSix = createBase();
+addSix(10);
+addSix(21);
