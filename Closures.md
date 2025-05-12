@@ -106,9 +106,102 @@ let count = 0;
 })()
 ```
 
-Q2 Write a function that would allow you to do this
+Q2 Write a function that would allow you to do this (Closure)
 
 ```js
-var addSix = createBase();
-addSix(10);
-addSix(21);
+function createBase(num){
+  return function (innerNum){
+    console.log(num + innerNum);
+  }
+}
+
+var addSix = createBase(6);
+addSix(10); // 16
+addSix(21); // 27
+```
+
+Q3 Time Optimization
+
+```js
+function find() {
+  let a = [];
+  for(let i = 0; i< 1000000; i++){
+    a[i]= i*i;
+  }
+  return function (index) {
+    console.log(a[index]) 
+  }
+}
+
+const closure = find();
+
+console.time("6")
+closure(2) // 4
+console.timeEnd("6") // 6: 6.653ms
+
+console.time("50")
+closure(50) // 2500
+console.timeEnd("50") // 50: 0.128ms
+
+console.time("6")
+closure(600) // 360000
+console.timeEnd("6") // 0.05ms
+```
+
+Q4 Block Scope and setTimeout
+ - `var` is function scoped not block scope
+ - `let` is block scoped.
+```js
+// using var
+function a () {
+  for(var i =0; i<3; i++){
+    setTimeout(function log(){
+      console.log(i); // 3 3 3
+    }, i*1000);
+  }
+}
+
+a();
+// using let
+function a () {
+  for(let i =0; i<3; i++){
+    setTimeout(function log(){
+      console.log(i);
+    }, i*1000);
+  }
+}
+
+a();
+```
+
+Q5 How would you use a closure to create a private counter?
+
+```js
+function counter() {
+  var _counter = 0; // put _ when using private variables, just a convention
+
+  function add(increment){
+    _counter += increment;
+  }
+  
+  function retrive(){
+    return "Counter = "+_counter;
+  }
+  
+  return {
+    add,
+    retrive
+  }
+}
+
+const c = counter();
+c.add(5)
+c.add(10)
+console.log(c.retrive()) // Counter = 15
+```
+
+Q6 What is Module Pattern?
+
+```js
+
+```

@@ -156,6 +156,19 @@ for (var i = 0; i < 5; i++) {
 }
 ```
 
+## Using Closure
+
+```js
+for(var i =0; i<3; i++){
+    function inner(i){
+        setTimeout(function log(){
+        console.log(i);
+        }, i*1000);
+    }
+    inner(i)
+}
+```
+
 # Function Hoisting
 
 - Functions are hoisted differently in JS.
