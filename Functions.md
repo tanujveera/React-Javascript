@@ -350,3 +350,6 @@ let user = {
 user.rc1() // undefined
 user.rc2() // tanuj veera
 ```
+
+## Function Currying
+[Function Currying link](https://javascript.info/currying-partials)
