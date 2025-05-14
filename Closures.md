@@ -105,7 +105,7 @@ let count = 0;
   console.log(count) // 0
 })()
 ```
-
+---
 Q2 Write a function that would allow you to do this (Closure)
 
 ```js
@@ -119,7 +119,7 @@ var addSix = createBase(6);
 addSix(10); // 16
 addSix(21); // 27
 ```
-
+---
 Q3 Time Optimization
 
 ```js
@@ -147,7 +147,7 @@ console.time("6")
 closure(600) // 360000
 console.timeEnd("6") // 0.05ms
 ```
-
+---
 Q4 Block Scope and setTimeout
  - `var` is function scoped not block scope
  - `let` is block scoped.
@@ -166,14 +166,14 @@ a();
 function a () {
   for(let i =0; i<3; i++){
     setTimeout(function log(){
-      console.log(i);
+      console.log(i); // 0 1 2
     }, i*1000);
   }
 }
 
 a();
 ```
-
+---
 Q5 How would you use a closure to create a private counter?
 
 ```js
@@ -199,9 +199,178 @@ c.add(5)
 c.add(10)
 console.log(c.retrive()) // Counter = 15
 ```
+---
+Q6 What is **Module Pattern**?
 
-Q6 What is Module Pattern?
+- The Module Pattern is a design pattern in JavaScript used to create private and public encapsulation — essentially allowing data hiding and modularization of code using closures and Immediately Invoked Function Expressions (IIFEs).
+
+- This is an Immediately Invoked Function Expression (IIFE):
+
+  - (function () { ... })() runs immediately, and its return value is assigned to Module.
+
+- Inside it:
+
+  - privateMethod() is a private function, scoped only within the IIFE.
+- Why Use the Module Pattern?
+  - **Encapsulation**: Keep internal logic (private methods/variables) hidden.
+
+  - **Avoid Global Scope Pollution**: Keeps variables local to the module.
+
+  - **Organized Code Structure**: Public API clearly defined via returned object.
 
 ```js
+var Module = (function (){
+  function privateMethod(){
+    // some code
+    console.log("private")
+  }
+  return {
+    publicMethod: function () {
+      // can call privateMethod();
+      console.log("Public")
+    },
+  }
+})();
 
+Module.publicMethod(); // Public
+Module.privateMethod(); // TypeError: Module.privateMethod is not a function
+
+// if private method is added in that public
+var Module = (function (){
+  function privateMethod(){
+    // some code
+    console.log("private")
+  }
+  return {
+    publicMethod: function () {
+      // can call privateMethod();
+      privateMethod();
+      console.log("Public")
+    },
+  }
+})();
+
+Module.publicMethod(); // private Public
+Module.privateMethod(); // // TypeError: Module.privateMethod is not a function
 ```
+---
+Q7 Make this run only once
+
+```js
+// this code gives the response multiple times
+let name;
+function intoFunction (){
+  name = "Tanuj Veera"
+  console.log(name);
+}
+
+intoFunction() // Tanuj Veera
+intoFunction() // Tanuj Veera
+intoFunction() // Tanuj Veera
+
+//---------------------------------------------------
+// Now with a local variable called we can track if its called
+
+let name;
+function intoFunction (){
+  let called = 0;
+  return function () {
+    if(called > 0) {
+      console.log("Already Called the function")
+    } else {
+      name = "Tanuj Veera"
+      console.log(name);
+      called++;
+    }
+  }
+}
+let resFun = intoFunction()
+resFun() // Tanuj Veera
+resFun() // Already Called the function
+resFun() // Already Called the function
+```
+---
+Q8 Make this run only once polyfill (Once Utility function)
+
+```js
+function once(func,context) {
+  let ran;
+  return function () {
+    if(func){
+      ran = func.apply(context || this, arguments);
+      func = null;
+    }
+    return ran;
+  }
+}
+
+const hello = once(()=>console.log("hello"));
+
+hello();
+hello();
+hello();
+```
+
+**Internal Working**
+- `ran` is a local variable stored in the closure — it holds the return value of the original function.
+- `func = null` ensures func cannot be called again — we remove the reference after first call.
+- The returned function checks if func exists:
+- If yes, it calls it and sets `func = null`.
+- If no, it just returns the saved result.
+
+**apply()** function is JS
+- `func.apply(context, argsArray)` is a way to call a function with a specific this context and an array-like object of arguments.
+```js
+ran = func.apply(context || this, arguments);
+```
+- To forward all arguments given to the returned function, to the original func.
+- To allow explicit binding of this using the optional context parameter.
+- If no context is passed, it defaults to the current this.
+
+
+**What is `this` in this case?**
+
+In the returned function:
+```js
+return function () {
+  ...
+}
+```
+
+If you call it like:
+```js
+const hello = once(fn, obj);
+hello();
+```
+- Inside the returned function, `this` depends on how it's called.
+- But the code prefers `context || this,` so if you pass a `context`, that wins.
+
+**Example** with **context** and **apply()**
+
+```js
+function once(func, context) {
+  let ran;
+  return function () {
+    if (func) {
+      ran = func.apply(context || this, arguments);
+      func = null;
+    }
+    return ran;
+  };
+}
+
+const person = {
+  name: "Tanuj",
+  greet() {
+    console.log("Hello, " + this.name);
+  },
+};
+
+const greetOnce = once(person.greet, person);
+
+greetOnce(); // "Hello, Tanuj"
+greetOnce(); // does not run
+```
+- We want `this` inside `greet()` to refer to `person`, not global or undefined.
+- So `apply(context, ...)` ensures the right `this`.
+---
