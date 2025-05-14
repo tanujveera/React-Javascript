@@ -219,15 +219,52 @@ square(5); // Arguments
 ```
 
 # Spread / Rest Operator
-
+**Rest Operator**
+ - Rest - Gather values into new array
 ```js
+// REST operator
 function multiply (...nums) { // Rest Operator
     console.log(nums[0] * nums[1])
 }
+// Function parameters
+function sum(...numbers) {
+  console.log(numbers); // an array
+  return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+console.log(sum(1, 2, 3, 4)); // 10
 
+// REST - Destructuring
+const [first, ...rest] = [10, 20, 30, 40];
+console.log(first); // 10
+console.log(rest);  // [20, 30, 40]
+
+// Object - Destructuring
+const user = { name: "Tanuj", age: 25, city: "Delhi" };
+const { name, ...others } = user;
+
+console.log(name);   // "Tanuj"
+console.log(others); // { age: 25, city: "Delhi" }
+```
+
+**Spread Operator**
+ - Spread - Spreads values (copy to existing or new array)
+```js
 var arr = [5,6]
-
 multiply(...arr) // Spread Operator
+
+// merging 2 arrays
+const a = [1, 2];
+const b = [3, 4];
+const combined = [...a, ...b];
+
+console.log(combined); // [1, 2, 3, 4]
+
+// extending values
+const user = { name: "Tanuj" };
+const updatedUser = { ...user, age: 25 };
+
+console.log(updatedUser); // { name: "Tanuj", age: 25 }
+
 ```
 
 - Rest Operator must be the last formal parameter, so this code will throw error

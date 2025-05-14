@@ -373,4 +373,72 @@ greetOnce(); // does not run
 ```
 - We want `this` inside `greet()` to refer to `person`, not global or undefined.
 - So `apply(context, ...)` ensures the right `this`.
+
+**Optimized code for `Once` utility function**
+
+```js
+function once(fn, context) {
+  let ran, done = false;
+  return function (...args) {
+    if (!done) {
+      ran  = fn.apply(context ?? this, args);
+      done = true;
+    }
+    return ran;
+  };
+}
+```
 ---
+## `??` **Nullish Coalescing Operator**
+
+- `??` is the `Nullish Coalescing Operator` in JavaScript.
+
+```js
+a ?? b
+```
+- Return `a` if it's not `null` or `undefined`, otherwise return `b`.
+
+How it's different from `||`:
+- `||` checks if the left-hand value is falsy.
+- If it’s falsy (like `false, 0, NaN, '', null, undefined`), it returns the right-hand value.
+```js
+const a = 0; // 0 or ''
+
+console.log(a || 42);  // 42 (0 is falsy)
+console.log(a ?? 42);  // 0  (0 is *not* null/undefined)
+
+const b = '';
+console.log(b || "tanuj"); // tanuj
+console.log(b ?? "tanuj"); // "" (empty string)
+```
+---
+Q9 Memoize Polyfill
+
+```js
+function myMemoize(fn,context) {
+  const res = {};
+  return function (...args) {
+    var argsCache = JSON.stringify(args);
+    if(! res[argsCache]){
+      res[argsCache] = fn.call(context ?? this,...args);
+    }
+    return res[argsCache]
+  }
+}
+
+const clumsyProduct = (num1,num2) => {
+  for(let i=0;i<=1000000;i++) {}
+  return num1 * num2;
+}
+
+const memoizedClumsyProduct = myMemoize(clumsyProduct);
+
+console.time("First call");
+console.log(memoizedClumsyProduct(6823,682348)) // 4655660404
+console.timeEnd("First call") // First call: 9.829ms
+
+console.time("First call");
+console.log(memoizedClumsyProduct(6823,682348)) // 4655660404
+console.timeEnd("First call") // First call: 0.08ms
+```
+
