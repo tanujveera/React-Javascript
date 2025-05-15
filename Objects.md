@@ -249,3 +249,118 @@ const {name, fullName :{first}} = user;
 console.log(name) // Tanuj Veera
 console.log(first) // Tanuj
 ```
+---
+Q10 Rest Operator Output
+- `Rest` operator should be always used at the last.
+- `Spread` operator can be used anywhere. 
+```js
+function getItems(fruitList, favoriteFruit,...args){
+  return [...fruitList,...args,favoriteFruit]
+}
+console.log(getItems(["banana","apple"],"pear","orange"))
+// SyntaxError: Rest parameter must be last formal parameter
+```
+By correcting the code, adding the rest operator at the last
+
+```js
+function getItems(fruitList, favoriteFruit,...args){
+  return [...fruitList,...args,favoriteFruit]
+}
+console.log(getItems(["banana","apple"],"pear","orange"))
+// [ 'banana', 'apple', 'orange', 'pear' ]
+```
+---
+Q11 What is the output? Call by Value
+
+- If you see, primitive types like `number`, `string`, `boolean`, `undefined`, `null`, `symbol`, `bigint` have their values copied. when we check those 2 variables will hold different values, when values are changed.
+- For objects, they are referenced to the object in memory. so both of those variables will point out to the same object in memory. If value is changed through one of the object,since other object points to the same, it will have the same value changed.
+```js
+let c = { greeting: "Hey!" }
+let d;
+
+d=c;
+c.greeting = "hello";
+console.log(d.greeting,c.greeting) //  hello hello
+
+let a = 10
+let b;
+
+b=a;
+a=9
+console.log(a,b) // 9 10
+
+function change(obj) {
+  obj = { msg: "New" };
+}
+
+let test = { msg: "Old" };
+change(test);
+console.log(test.msg); // Old
+```
+
+**Call by Value**
+- JavaScript always uses Call by Value — but the meaning of "value" differs between primitives and objects.
+
+Primitives
+```js
+let a = 10;
+let b = a;
+a = 20;
+
+console.log(a); // 20
+console.log(b); // 10
+```
+- `a` and `b` are independent.
+
+- `b = a` copies the value of a (10) into `b`.
+
+- **Call by value**: you pass the actual value, and changes don't affect the original.
+
+**Objects/Arrays/Functions → Still Call by Value (of reference)**
+
+```js
+let obj1 = { msg: "Hello" };
+let obj2 = obj1;
+
+obj1.msg = "Hi";
+
+console.log(obj2.msg); // Hi
+```
+- `obj1` holds a reference (address) to the object.
+
+- When you do `obj2 = obj1`, you're copying the reference, not the object itself.
+
+- So `obj1` and `obj2` both point to the same object in memory.
+
+- Still `call by value` — but the value being passed or assigned is a reference to the object.
+
+**JS doesn't have Call by Reference**
+
+True Call by Reference means that if you pass a variable to a function, and the function reassigns it, the original variable changes.
+
+```js
+// Objects
+function change(obj) {
+  obj = { msg: "New" };
+}
+
+let test = { msg: "Old" };
+change(test);
+console.log(test.msg); // Still "Old"
+
+// Primitive types
+function change(obj) {
+  obj = 9;
+}
+
+let test = 8;
+change(test);
+console.log(test); // 8
+```
+
+- Inside the function, obj was reassigned to a new object.
+
+- The outer test still points to the original object — unchanged.
+
+- Proof that JS is not truly `Call by Reference`
+---
