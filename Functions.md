@@ -339,7 +339,7 @@ fnArr(1,3,2)
 
 // 4 - 'this' keyword
 /* Here, rc1 is a arrow function and this keyword will check the global scope
-But rc2 function will check local scope which is in user object.
+But rc2 function will check local scope which is in user object. 
 */
 let user = {
     username : 'tanuj veera',
