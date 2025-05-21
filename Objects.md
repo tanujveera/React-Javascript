@@ -364,3 +364,45 @@ console.log(test); // 8
 
 - Proof that JS is not truly `Call by Reference`
 ---
+
+Q12 Will these be equal ?
+- Since each object will have a separate memory allocated it will not be equal.
+```js
+console.log({a:1} == {a:1}); // false
+console.log({a:1} === {a:1}); // false
+```
+
+Q13 What's the output ?
+- Since it checks the reference of the object memory.
+```js
+let person = {name:"hello"}
+const members = [person];
+person=null;
+console.log(members) // [ { name: 'hello' } ]
+console.log(person) // null
+```
+
+- If we change the object internally, it effects the other object as well.
+
+```js
+let person = {name:"hello"}
+const members = [person];
+person.name=null;
+console.log(members) // [ { name: null } ]
+```
+---
+Q14 What is the output? Spread Operator use case
+
+- `...value`, you are cloning the object instead of using object reference.
+- `multiply(value)` is directly taking the object reference, so when something is changed in the object, it will change the original object and that's why when called 2nd time you are getting `120`.
+```js
+const value = {number : 30}
+const multiply = (x = {...value}) => {
+  console.log(x.number *= 2)
+}
+
+multiply() // 60
+multiply() // 60
+multiply(value) // 60
+multiply(value) // 120
+```
