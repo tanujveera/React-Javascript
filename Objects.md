@@ -406,3 +406,45 @@ multiply() // 60
 multiply(value) // 60
 multiply(value) // 120
 ```
+---
+
+Q15 What's the output? Object element change
+
+```js
+function changeAge(person) {
+  person.age = 25;
+  person = {
+    name: "Tanuj",
+    age:50
+  }
+  return person
+}
+
+const personObj1 = {
+  name: "Alex",
+  age:30,
+}
+
+const personObj2 = changeAge(personObj1)
+
+console.log(personObj1) // { name: 'Alex', age: 25 }
+console.log(personObj2) // { name: 'Tanuj', age: 50 }
+```
+---
+
+Q16 Deep copy and Shallow copy
+- A shallow copy copies the top-level properties, but if any property is an object or array, it copies the reference, not the actual value.
+
+```js
+const copy1 = Object.assign({}, original);
+const copy2 = { ...original };
+```
+
+- A deep copy makes a full, independent clone, including nested objects/arrays.
+```js
+// Simple way
+const deep = JSON.parse(JSON.stringify(original));
+// Best way (modern)
+const deep = structuredClone(original);
+```
+
